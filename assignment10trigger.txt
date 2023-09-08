@@ -18,6 +18,7 @@ A – 10 (i.e Account Name – Total number of Contacts)
 B – 10
 C – 10
 
+Code:-
 
 trigger sendMailToManagerOnUpdate on User (after update) {
 String uId;
