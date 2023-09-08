@@ -9,6 +9,7 @@ Send an email as an attachment to the lead email Id when a lead is created.
 Email Subject: Welcome
 Body: Please find the attached PDF.
 
+Code:-
 
 trigger sendEmailWithPdfFileAttached on Lead (after insert) {
 List<Messaging.SingleEmailMessage> emailList= new List<Messaging.SingleEmailMessage>();
