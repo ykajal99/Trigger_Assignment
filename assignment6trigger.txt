@@ -6,6 +6,7 @@ Once an Account is inserted an email should go to the System Admin user with spe
 Email Body: (Hi System Admin,
                            An account has been created and the name is “Account Name”)
 
+Code:-
 
 trigger Account_EmailHandler7 on Account (before insert) {
     if(Trigger.isBefore && Trigger.isInsert){
