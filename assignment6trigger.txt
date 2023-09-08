@@ -1,3 +1,12 @@
+Problem 6:
+
+Pre-Reqs:  Not Required.
+Assignment Description: 
+Once an Account is inserted an email should go to the System Admin user with specified text below.
+Email Body: (Hi System Admin,
+                           An account has been created and the name is “Account Name”)
+
+
 trigger Account_EmailHandler7 on Account (before insert) {
     if(Trigger.isBefore && Trigger.isInsert){
     List<String> strLst = new List<String>();

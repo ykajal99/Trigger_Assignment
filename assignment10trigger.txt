@@ -1,3 +1,24 @@
+Problem 10: 
+
+Pre-Reqs:  
+•	Multiple users should be there.
+•	User’s Manager should be tagged.
+
+Assignment Description: 
+Once a user is updating an email should go to his manager email Id – Notify manager = true ,
+with the total number of Account Owned by him,
+You have assigned number of account and Account Contains Number of Contacts
+Like
+Email Subject: Your Accounts and Number of Related Contacts.
+Email Body: 
+Dear User,
+You have assigned number of account and Account Contains Number of Contacts.
+Total Accounts = 3
+A – 10 (i.e Account Name – Total number of Contacts)
+B – 10
+C – 10
+
+
 trigger sendMailToManagerOnUpdate on User (after update) {
 String uId;
 String mngId;

@@ -1,3 +1,13 @@
+Problem 8:
+
+Pre-Reqs:  Not Required.
+Assignment Description: 
+Write a trigger on contact to prevent duplicate records based on Contact Email & Contact Phone.
+•	Either one of the fields is duplicate then it should throw error.
+•	If both the fields are duplicates, then also it should throw error.
+
+
+
 trigger dupEmailPhone on Contact (before insert,before update) {
 Map<String, Contact> emailMap = new Map<String, Contact>();
 Map<String, Contact> phoneMap = new Map<String, Contact>();

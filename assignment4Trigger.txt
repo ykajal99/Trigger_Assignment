@@ -1,3 +1,11 @@
+Problem 4:
+Pre-Reqs:  Create a field on Contact called Profile, text, 255.
+Assignment Description: 
+When an Account is updated and the Website is filled in, update all the Profile field on all Contacts to:
+•	Profile = Website + ‘/’ + First Letter of First Name + Last Name.
+
+
+
 trigger TriggerExample3  on Account (After Update)
 {   
     if(Trigger.isAfter && Trigger.isUpdate)

@@ -1,3 +1,15 @@
+Problem 9:
+
+Pre-Reqs:  
+•	Upload any pdf file to Document first.
+•	Create Email template and attach a pdf file to be sent along with the Mail
+•	Lead Email field should not be blank/null.
+Assignment Description: 
+Send an email as an attachment to the lead email Id when a lead is created.
+Email Subject: Welcome
+Body: Please find the attached PDF.
+
+
 trigger sendEmailWithPdfFileAttached on Lead (after insert) {
 List<Messaging.SingleEmailMessage> emailList= new List<Messaging.SingleEmailMessage>();
 /*On App Launcher search for Email Template then Create a new Email Template with Name="Pdf Attached Email for Lead", Subject="Welcome", Body= "Please find the attached PDF." and Related Entity type= Lead and Save it.

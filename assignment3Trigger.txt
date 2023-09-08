@@ -1,3 +1,9 @@
+Problem 3:
+Pre-Reqs:  Create a field on Account called “Out_of_Zip”, checkbox, default off.
+Assignment Description: 
+When a Billing Address is modified, get the new Postal Code. Then check which Contacts on the Account are outside that Postal Code. If 1 or more Contacts are outside of the Postal Code, mark Out_of_Zip as TRUE.
+
+
 trigger TriggerExample on Account (before update, before insert) {
     Set<Id> changedAccounts = new Set<Id>();
     for(Integer i = 0; i < Trigger.New.size(); i++) {
