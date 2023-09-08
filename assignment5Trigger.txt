@@ -1,0 +1,46 @@
+public static void DeadIntel(list<Contact> cont){
+        Set<Id> accIds = new Set<Id>();
+        for(Contact conList : cont){
+            if(conList.accountId!=null){
+                accIds.add(conList.accountId);    
+            }
+            
+        }
+        
+        Map<Id, List<Contact>> accContactMap = new Map<Id, List<Contact>>();
+        List<Account> accUpdateList = new List<Account>();
+        for(Contact obj : [SELECT accountId,Dead__c
+                           FROM Contact
+                           WHERE accountId IN :accIds]){
+                               
+                               List<Contact> contLists;
+                               if(accContactMap.containsKey(obj.accountId)){
+                                   contLists = accContactMap.get(obj.accountId);
+                               }else{
+                                   contLists = new List<Contact>();
+                               }
+                               contLists.add(obj);
+                               accContactMap.put(obj.accountId, contLists);
+                           }
+        for(Id accId : accContactMap.keySet()){
+            Integer count_of_Dead = 0;
+            Integer total_con = accContactMap.get(accId).size();
+            if(accContactMap.get(accId).size() > 1){              
+                for(integer i =0 ; i<accContactMap.get(accId).size(); i++)
+                    if(accContactMap.get(accId)[i].Dead__c == true){
+                        count_of_Dead++;
+                    }
+            }
+            if((count_of_Dead*100)/total_con) > 70)
+                accUpdateList.add(new Account(id = accId, needintel__c = true));   
+        }   
+        if(!accUpdateList.isEmpty()){
+            update accUpdateList;
+        }
+    }
+//Trigger
+trigger UpdateContact on Contact (after update) {
+if(Trigger.isUpdate && Trigger.isAfter){
+        AccountContact.DeadIntel(Trigger.new);
+    }
+}

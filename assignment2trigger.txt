@@ -1,0 +1,16 @@
+trigger Account_Contact2 on Contact(after insert){
+   if(Trigger.isAfter && Trigger.isInsert){
+   set<Id> Ids= new set<Id>();
+   for(Contact con: Trigger.new){
+     if(con.accountId!=Null){
+       Ids.add(con.accountId);
+    }
+    }
+List<Account> acclst=[Select Id,Name,Contact_Created__c from Account Where Id IN: Ids];
+for(Account acc: acclst){
+acc.Contact_Created__c=True;
+}
+if(acclst.size()>0){
+update acclst;
+}
+}

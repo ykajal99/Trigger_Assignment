@@ -1,0 +1,21 @@
+trigger Account_EmailHandler7 on Account (before insert) {
+    if(Trigger.isBefore && Trigger.isInsert){
+    List<String> strLst = new List<String>();
+    List<Messaging.SingleEmailMessage> mails= new List<Messaging.SingleEmailMessage>();
+    for(Account acc: Trigger.new){
+        if(acc.Email__c!=Null ){
+        Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+         strLst.add(acc.Email__c);  
+          mail.setSubject('An Account has been created');
+          mail.setReplyTo('ykajal2022@gmail.com');  
+          String body = 'Hi System Admin ' +acc.Name + ', ';
+          body += 'An account has been created and name is "AccountName"';
+        }
+        if(mails.size()>0){
+            
+         system.debug('list of mails' +mails.size());       
+         Messaging.sendEmail(mails);
+    }
+} 
+} 
+}
