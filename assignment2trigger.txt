@@ -3,6 +3,7 @@ Pre-Reqs:  Create a field on Account called “Contact_Created__c”, checkbox, 
 Assignment Description: 
 Create an apex trigger on the contact object and every time a new contact will be created, and an account will be selected in the creation of that contact object then on that account object a checkbox filed (Contact_Created__c) will be checked true, which represent that this account has a contact.
 
+Code:-
 
 trigger Account_Contact2 on Contact(after insert){
    if(Trigger.isAfter && Trigger.isInsert){
