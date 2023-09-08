@@ -5,6 +5,7 @@ When an Account is updated and the Website is filled in, update all the Profile 
 •	Profile = Website + ‘/’ + First Letter of First Name + Last Name.
 
 
+Code:-
 
 trigger TriggerExample3  on Account (After Update)
 {   
