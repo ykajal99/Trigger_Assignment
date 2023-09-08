@@ -5,6 +5,7 @@ Pre-Reqs:
 Assignment Description: 
 If 70% or more of the Contacts on an Account are Dead, mark the need_intel field to TRUE.
 
+Code:-
 
 public static void DeadIntel(list<Contact> cont){
         Set<Id> accIds = new Set<Id>();
