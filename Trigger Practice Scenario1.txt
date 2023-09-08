@@ -1,0 +1,313 @@
+Scenario 1: When ever a case is created with origin as email then set status as 
+new and Priority as Medium.
+
+Trigger Class:-
+
+trigger CaseTrigger1 on Case (before insert) {
+    if(Trigger.isBefore && Trigger.isInsert){
+        CaseTriggerHandler1.createCase(Trigger.new);
+    }
+}
+
+Apex Class:-
+
+public class CaseTriggerHandler1 {
+    public static void createCase(List<Case> caseList){
+        if(!caseList.isEmpty()){
+            system.debug('Case List..:'+caseList);
+       
+        for(Case cs: caseList){
+            if(cs.Origin=='Email'){
+                cs.Priority='Medium';
+                cs.Status='New';
+            }
+        }
+    }
+    }
+}
+
+Scenario 2:  When ever Lead is created with LeadSource as Web then give 
+rating as cold otherwise hot.
+
+Trigger Class:-
+
+trigger LeadTrigger2 on Lead (before insert) {
+    if(Trigger.isBefore && Trigger.isInsert){
+         LeadTriggerHandler2.createLead(Trigger.new);
+    }
+}
+
+Apex Class:-
+
+public class LeadTriggerHandler2 {
+   public static void createLead(List<Lead> leadList){
+       if(!leadList.isEmpty()){
+           system.debug('Lead List...:'+leadList);
+     
+       for(Lead ld : leadList)
+       if(ld.leadsource=='Web'){
+           ld.Rating='Cold';
+       }else{
+           ld.Rating='Hot';
+       }
+   }
+   }  
+}
+
+ Scenario 3: Whenever New Account Record is created then needs to create 
+associated Contact Record automatically.
+
+Trigger Class:-
+
+trigger AccountConTrigger3 on Account (after insert,before insert) {
+   
+    if(Trigger.isAfter && Trigger.isInsert){
+        AccountConTriggerHandler3.createCon(Trigger.new);
+          }
+}
+
+
+Apex Class:-
+
+public class AccountConTriggerHandler3 {
+   public static void createCon(List<Account> accList){
+      List<Contact> cons=new List<Contact>();
+       for(Account acc: accList){          
+           Contact con= new Contact();
+           con.accountid=acc.id;
+           con.lastname=acc.name;
+           con.phone=acc.phone;
+           cons.add(con);
+       }
+       insert cons; 
+   }
+
+Scenario 4:  When ever the Account is created with Industry as Banking then 
+create a contact for account, Contact Lastname as Account name 
+and contact phone as account phone.
+
+Trigger Class:-
+
+trigger AccountConTrigger3 on Account (after insert,before insert) {
+if(Trigger.isAfter && Trigger.isInsert){
+        AccountConTriggerHandler3.createCons(Trigger.new);
+          }
+}
+
+Apex Class:-
+
+public static void createCons(List<Account> accList){
+      List<Contact> newcons=new List<Contact>();
+       for(Account acc: accList){
+           if(acc.industry=='Banking'){
+           Contact con= new Contact();
+           con.accountid=acc.id;
+           con.lastname=acc.name;
+           con.phone=acc.phone;
+           newcons.add(con);
+       }
+       }
+       insert newcons; 
+   }
+
+Scenario 5: Creates the number of contacts which are equal to the number 
+which we will enter in the Number of Locations field on the 
+Account Object.
+
+Trigger Class:-
+
+trigger AccountConTrigger3 on Account (after insert,before insert) {
+if(Trigger.isAfter && Trigger.isInsert){
+         AccountConTriggerHandler3.createContacts(Trigger.new);
+   }
+}
+
+
+Apex Class:-
+
+public static void createContacts(List<Account> accList){
+        List<Contact> conList= new List<Contact>();
+         Map<Id,decimal> AccMap = new  Map<Id,decimal>();
+          for(Account acc:accList){
+              AccMap.put(acc.Id,acc.NumberofLocations__c);
+          }
+         if(AccMap.size()>0 && AccMap!=null){
+             for(Id accId: AccMap.keyset()){
+                 for(integer i=0; i<AccMap.get(accId); i++){
+                    Contact cons =  new Contact();
+                     cons.accountId=accId;
+                     cons.lastname='Contact'+i;
+                     conList.add(cons);
+                 }
+             }
+         }
+         if(conList.size()>0 && conList!=null)
+             insert conList;
+         
+     }  
+
+Scenario 6:  Upon Account Creation if Industry is not null and having value as 
+‘Media’ then populate Rating as Hot.
+
+
+Trigger Class:-
+
+trigger AccountConTrigger3 on Account (before insert,before update) {
+if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
+         AccountConTriggerHandler3.updateRating(Trigger.new);
+   }
+}
+
+Apex Class:-
+
+ public static void updateRating(List<Account> accList){ 
+       for(Account acc: accList){
+        if(acc.Industry!=null && acc.Industry=='Media'){
+            acc.Rating='Hot';
+        }
+       }
+     }
+
+Scenario 7: Upon Opportunity Creation if Amount is not null and is greater 
+than 100000 then populate ‘Hot Opportunity’ in description field.
+
+Trigger Class:-
+
+trigger OpportunityTigger on Opportunity (before insert,before update) {
+    if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
+        OppotunityTriggerHandler.insertOpp(Trigger.new);
+    }
+}
+
+Apex Class:-
+
+public class OppotunityTriggerHandler {
+    public static void insertOpp(List<Opportunity> oppList){
+        for(Opportunity opp: oppList){
+            if(opp.Amount!=Null && opp.Amount>100000){
+                opp.Description='Hot Opportunity';
+            }
+        }
+    }
+}
+
+Scenario 8:  When an account inserts and CopyBillingToShipping (Custom 
+Field) checkbox is checked then automatically copy account 
+billing address into account shipping address.
+
+Trigger Class:-
+
+
+trigger AccountConTrigger3 on Account (before insert,before update) {
+if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){
+         AccountConTriggerHandler3.createAccAddress(Trigger.new);
+   }
+}
+
+Apex Class:-
+
+ public static void createAccAddress(List<Account> accList){
+        for(Account newAccount: accList){
+             if (newAccount.CopyBillingToShipping__c) {
+            
+                    newAccount.ShippingStreet=newAccount.BillingStreet;
+               
+                    newAccount.ShippingCity=newAccount.BillingCity;
+               
+                    newAccount.ShippingState=newAccount.BillingState;
+              
+                    newAccount.ShippingPostalCode=newAccount.BillingPostalCode;
+              
+                    newAccount.ShippingCountry=newAccount.BillingCountry;
+               
+             }
+        }
+    }
+    
+
+Scenario 9: Upon Creation of Position (Custom Object) if it is a New Position 
+and Open Date,Min Pay & Max Pay are not populated then 
+populated them with below values: 
+   a. Open Date = Today’s Date 
+  b. Min Pay = 10000
+  c. Max Pay = 15000
+
+Trigger Class:-
+
+trigger PositionValue9 on Position__c (before insert) {
+ if(Trigger.isBefore && Trigger.isInsert){
+        PositionTriggerHandler.insertPos(Trigger.new);
+    }
+}
+
+Apex Clas:-
+
+public class PositionTriggerHandler {
+    Public static void insertPos(List<Position__c> PosList){
+        for(Position__c newPosition: PosList){
+            if(newPosition.New_Position__c){
+                if(newPosition.Open_Date__c==Null){
+                    newPosition.Open_Date__c=Date.today();
+                }
+                if(newPosition.Maximum_Pay__c==Null){
+                    newPosition.Maximum_Pay__c=15000;
+                }
+                if(newPosition.Minimum_Pay__c==Null){
+                    newPosition.Minimum_Pay__c=10000;
+                }
+            }   
+        }
+    }
+}
+
+Scenario 10:  Create a related Contact when an Account is created.
+
+Trigger Class:-
+
+
+trigger AccountConTrigger3 on Account (after insert){
+ if(Trigger.isAfter && Trigger.isInsert){
+        AccountConTriggerHandler3.createRelatedCon(Trigger.new);
+          } 
+}
+
+
+Apex Class:-
+
+ public static void createRelatedCon(List<Account> accList){
+      List<Contact> cons=new List<Contact>();
+       for(Account acc: accList){          
+           Contact con= new Contact();
+           con.AccountId = acc.Id;
+           con.Firstname= 'New';
+           con.Lastname='Contact';
+           cons.add(con);
+       }
+       insert cons; 
+   }
+
+Scenario 11:  Create a related Opportunity when an Account is created.
+
+Trigger Class:-
+
+
+trigger AccountConTrigger3 on Account (after insert){
+ if(Trigger.isAfter && Trigger.isInsert){
+        AccountConTriggerHandler3.createRelatedOpp(Trigger.new);
+          } 
+}
+
+
+Apex Class:-
+
+ public static void createRelatedOpp(List<Account> accList){
+      List<Opportunity> opps=new List<Opportunity> ();
+       for(Account acc: accList){          
+           Opportunity opp= new Opportunity();
+           opp.AccountId = acc.Id;
+           opp.CloseDate= Date.today();
+           opp.Minimum_Pay_c=1000;
+           opps.add(opp);
+       }
+       insert opps; 
+   }
