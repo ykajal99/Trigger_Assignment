@@ -6,7 +6,7 @@ Write a trigger on contact to prevent duplicate records based on Contact Email &
 •	Either one of the fields is duplicate then it should throw error.
 •	If both the fields are duplicates, then also it should throw error.
 
-
+Code:-
 
 trigger dupEmailPhone on Contact (before insert,before update) {
 Map<String, Contact> emailMap = new Map<String, Contact>();
